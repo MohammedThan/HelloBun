@@ -1,18 +1,18 @@
 import { Database } from "bun:sqlite";
 
-const db = new Database("Requests.sqlite", { create: true });
+export const db = new Database("Requests.sqlite", { create: true });
 
 function init() {
   const createRequests = db.query(`CREATE TABLE IF NOT EXISTS requests (
         id INTEGER PRIMARY KEY ,
         type INTEGER CHECK( type <= 5 AND type >= 1),
-        status INTEGER CHECK( type <= 3 AND type >= 1),
-        typeId INTEGER UNIQUE
+        status INTEGER CHECK( status <= 3 AND status >= 1),
+        typeId INTEGER
     );
     `);
 
   const createNewLicenses = db.query(`CREATE TABLE IF NOT EXISTS newLicenses (
-        id  INTEGER PRIMARY KEY AUTOINCREMENT,
+        id  INTEGER PRIMARY KEY ,
         companyName Text,
         licenceType Text,
         isOffice INTEGER,
@@ -25,7 +25,7 @@ function init() {
 
   const createAccountRequests =
     db.query(`CREATE TABLE IF NOT EXISTS accountRequests (
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id  INTEGER PRIMARY KEY ,
     companyName Text,
     requesterName Text,
     applicantName Text,
@@ -36,7 +36,7 @@ function init() {
 );`);
 
   const createPermissions = db.query(`CREATE TABLE IF NOT EXISTS permissions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY ,
     canView INTEGER DEFAULT 0,
     canUpdate INTEGER DEFAULT 0,
     canDelete INTEGER DEFAULT 0,
@@ -46,7 +46,7 @@ function init() {
 
   const createInspectionRequests =
     db.query(`CREATE TABLE IF NOT EXISTS inspectionRequests (
-  id  INTEGER PRIMARY KEY AUTOINCREMENT,
+  id  INTEGER PRIMARY KEY ,
   inspectionDate Text,
   inspectionType Text,
   requestId INTEGER UNIQUE
@@ -54,28 +54,27 @@ function init() {
 
   const createAddActivities =
     db.query(`CREATE TABLE IF NOT EXISTS addActivities (
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id  INTEGER PRIMARY KEY ,
     companyName Text,
     licenceId Text,
-    activities Text,
     requestId INTEGER UNIQUE
 );`);
 
   const createActivity = db.query(`CREATE TABLE IF NOT EXISTS activity (
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id  INTEGER PRIMARY KEY ,
     name TEXT
 );`);
 
   const createCompanyActives =
     db.query(`CREATE TABLE IF NOT EXISTS companyActives (
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,
-    addActivityId TEXT,
-    activityId TEXT
+    id  INTEGER PRIMARY KEY ,
+    addActivityId INTEGER ,
+    activityId INTEGER
 );`);
 
   const createStampLicenseLetters =
     db.query(`CREATE TABLE IF NOT EXISTS stampLicenseLetters (
-  id  INTEGER PRIMARY KEY AUTOINCREMENT,
+  id  INTEGER PRIMARY KEY ,
   companyName Text,
   licenceId Text,
   requestDate Text,
@@ -95,4 +94,4 @@ function init() {
 
 init();
 
-db.close();
+// db.close(); no need to close BUN handel this
