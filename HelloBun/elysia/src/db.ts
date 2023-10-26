@@ -4,7 +4,7 @@ const db = new Database("Requests.sqlite", { create: true });
 
 function init() {
   const createRequests = db.query(`CREATE TABLE IF NOT EXISTS requests (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY ,
         type INTEGER CHECK( type <= 5 AND type >= 1),
         status INTEGER CHECK( type <= 3 AND type >= 1),
         typeId INTEGER UNIQUE
@@ -31,7 +31,7 @@ function init() {
     applicantName Text,
     userName Text,
     contactEmail Text,
-    permissionsID INTEGER UNIQUE,
+    permissionsId INTEGER UNIQUE,
     requestId INTEGER UNIQUE
 );`);
 
@@ -56,7 +56,7 @@ function init() {
     db.query(`CREATE TABLE IF NOT EXISTS addActivities (
     id  INTEGER PRIMARY KEY AUTOINCREMENT,
     companyName Text,
-    licenceID Text,
+    licenceId Text,
     activities Text,
     requestId INTEGER UNIQUE
 );`);
@@ -77,7 +77,7 @@ function init() {
     db.query(`CREATE TABLE IF NOT EXISTS stampLicenseLetters (
   id  INTEGER PRIMARY KEY AUTOINCREMENT,
   companyName Text,
-  licenceID Text,
+  licenceId Text,
   requestDate Text,
   requestId INTEGER UNIQUE
 );`);
