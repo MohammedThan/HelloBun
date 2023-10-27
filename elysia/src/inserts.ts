@@ -1,7 +1,7 @@
 import { OldRequest, activity, newLicenses } from "./types";
 import { Database } from "bun:sqlite";
 import * as bun from "bun";
-import { preventNaN } from "./utils";
+// import { preventNaN } from "./utils";
 
 export function convertToNewSchema(oldData: OldRequest[]) {
   const db = new Database("Requests.sqlite", { create: true });
@@ -51,21 +51,21 @@ function insertType1(oldTypeData: OldRequest[], db: any) {
         const requestId = oldRequest.RequestID;
         id += 1;
         insert.run(
-          preventNaN(id),
+          id,
           oldRequest?.RequestData?.CompanyName,
-          preventNaN(oldRequest?.RequestData?.LicenceType),
+          oldRequest?.RequestData?.LicenceType,
           oldRequest?.RequestData?.IsOffice,
           oldRequest?.RequestData?.OfficeName,
           oldRequest?.RequestData?.OfficeServiceNumber,
           oldRequest?.RequestData?.RequestDate,
           oldRequest?.RequestData?.Activities,
-          preventNaN(requestId)
+          requestId
         );
         requestInsert.run(
-          preventNaN(requestId),
+          requestId,
           oldRequest?.RequestType,
           oldRequest?.RequestStatus,
-          preventNaN(id)
+          id
         );
       }
       return oldRequests.length;
@@ -125,21 +125,21 @@ function insertType2(oldTypeData: OldRequest[], db: any) {
         );
 
         insert.run(
-          preventNaN(id),
+          id,
           oldRequest?.RequestData?.CompanyName,
           oldRequest?.RequestData?.RequesterName,
           oldRequest?.RequestData?.ApplicantName,
           oldRequest?.RequestData?.UserName,
           oldRequest?.RequestData?.ContactEmail,
-          preventNaN(permissionId),
-          preventNaN(requestId)
+          permissionId,
+          requestId
         );
 
         requestInsert.run(
-          preventNaN(requestId),
+          requestId,
           oldRequest?.RequestType,
           oldRequest?.RequestStatus,
-          preventNaN(id)
+          id
         );
       }
       return oldRequests.length;
@@ -177,19 +177,19 @@ function insertType3(oldTypeData: OldRequest[], db: any) {
         id += 1;
 
         insert.run(
-          preventNaN(id),
+          id,
           oldRequest?.RequestData?.InspectionDate +
             " " +
             oldRequest?.RequestData?.InspectionTime,
           oldRequest?.RequestData?.InspectionType,
-          preventNaN(requestId)
+          requestId
         );
 
         requestInsert.run(
-          preventNaN(requestId),
+          requestId,
           oldRequest?.RequestType,
           oldRequest?.RequestStatus,
-          preventNaN(id)
+          id
         );
       }
       return oldRequests.length;
@@ -249,26 +249,26 @@ function insertType4(oldTypeData: OldRequest[], db: any) {
         const requestId = oldRequest.RequestID;
         id += 1;
         insert.run(
-          preventNaN(id),
+          id,
           oldRequest?.RequestData?.CompanyName,
           oldRequest?.RequestData?.LicenceID,
-          preventNaN(requestId)
+          requestId
         );
 
         oldRequest.RequestData.Activities.map((activityName: string) => {
           companyActivityId += 1;
           companyActivesInsert.run(
             companyActivityId,
-            preventNaN(id),
+            id,
             activityIds.find((activity) => activity.name === activityName)?.id
           );
         });
 
         requestInsert.run(
-          preventNaN(requestId),
+          requestId,
           oldRequest.RequestType,
           oldRequest.RequestStatus,
-          preventNaN(id)
+          id
         );
       }
       return oldRequests.length;
@@ -304,18 +304,18 @@ function insertType5(oldTypeData: OldRequest[], db: any) {
         id += 1;
 
         insert.run(
-          preventNaN(id),
+          id,
           oldRequest?.RequestData?.CompanyName,
           oldRequest?.RequestData?.LicenceID,
           oldRequest?.RequestData?.RequestDate,
-          preventNaN(requestId)
+          requestId
         );
 
         requestInsert.run(
-          preventNaN(requestId),
+          requestId,
           oldRequest?.RequestType,
           oldRequest?.RequestStatus,
-          preventNaN(id)
+          id
         );
       }
       return oldRequests.length;

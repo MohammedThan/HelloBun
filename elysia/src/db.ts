@@ -7,7 +7,7 @@ function init() {
         id INTEGER PRIMARY KEY ,
         type INTEGER CHECK( type <= 5 AND type >= 1),
         status INTEGER CHECK( status <= 3 AND status >= 1),
-        typeId INTEGER
+        typeId INTEGER NOT NULL
     );
     `);
 
@@ -20,7 +20,7 @@ function init() {
         officeServiceNumber Text,
         requestDate DATE,
         activities TEXT,
-        requestId INTEGER UNIQUE
+        requestId INTEGER UNIQUE NOT NULL
     );`);
 
   const createAccountRequests =
@@ -32,7 +32,7 @@ function init() {
     userName Text,
     contactEmail Text,
     permissionsId INTEGER UNIQUE,
-    requestId INTEGER UNIQUE
+    requestId INTEGER UNIQUE NOT NULL
 );`);
 
   const createPermissions = db.query(`CREATE TABLE IF NOT EXISTS permissions (
@@ -41,7 +41,7 @@ function init() {
     canUpdate INTEGER DEFAULT 0,
     canDelete INTEGER DEFAULT 0,
     canAdd INTEGER DEFAULT 0,
-    accountId INTEGER UNIQUE
+    accountId INTEGER UNIQUE NOT NULL
   );`);
 
   const createInspectionRequests =
@@ -49,7 +49,7 @@ function init() {
   id  INTEGER PRIMARY KEY ,
   inspectionDate Text,
   inspectionType Text,
-  requestId INTEGER UNIQUE
+  requestId INTEGER UNIQUE NOT NULL
 );`);
 
   const createAddActivities =
@@ -57,12 +57,12 @@ function init() {
     id  INTEGER PRIMARY KEY ,
     companyName Text,
     licenceId Text,
-    requestId INTEGER UNIQUE
+    requestId INTEGER UNIQUE NOT NULL
 );`);
 
   const createActivity = db.query(`CREATE TABLE IF NOT EXISTS activity (
     id  INTEGER PRIMARY KEY ,
-    name TEXT
+    name TEXT NOT NULL
 );`);
 
   const createCompanyActives =
@@ -78,7 +78,7 @@ function init() {
   companyName Text,
   licenceId Text,
   requestDate Text,
-  requestId INTEGER UNIQUE
+  requestId INTEGER UNIQUE NOT NULL
 );`);
 
   createRequests.run();

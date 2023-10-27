@@ -220,7 +220,7 @@ const PageContent = ({
         show: true,
         //@ts-ignore
         message: (error.message +
-          " most probably duplicate data entered please make sure all the data you want to insert is new") as string,
+          "most probably duplicate data entered or null keys, please make sure all the data you want insert have a unique key") as string,
         variant: "error",
         title: "ERROR",
       });
