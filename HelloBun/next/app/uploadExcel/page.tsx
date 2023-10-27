@@ -85,7 +85,7 @@ export default function UploadPurchaseMenuScreen() {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full ">
       {showAlert.show && (
         <Dialog
           open={true}
@@ -95,7 +95,7 @@ export default function UploadPurchaseMenuScreen() {
         >
           <Alert severity={showAlert.variant}>
             <AlertTitle>{showAlert.title}</AlertTitle>
-            {showAlert.message}
+            <div dangerouslySetInnerHTML={{ __html: showAlert.message }} />
           </Alert>
         </Dialog>
       )}
@@ -198,12 +198,18 @@ const PageContent = ({
         setFile(null);
         setShowAlert({
           show: true,
-          message: "ADDED SUCCESSFULLY",
+          message: `ADDED SUCCESSFULLY <br/>
+          insert ${result.type1} rows in newLicenses  <br/>
+          insert ${result.type2} rows in accountRequests  <br/>
+          insert ${result.type3} rows in inspectionRequests  <br/>
+          insert ${result.type4} rows in addActivities  <br/>
+          insert ${result.type5} rows in stampLicenseLetters  <br/>
+          in total ${result.seconds} seconds
+          `,
           variant: "success",
           title: "SUCCESS",
         });
-        console.log("onUploadFile");
-        console.log(data);
+
         return result;
       } else {
         throw new Error("somehting went wrong");
@@ -214,7 +220,7 @@ const PageContent = ({
         show: true,
         //@ts-ignore
         message: (error.message +
-          " most probably duplicate data entered") as string,
+          " most probably duplicate data entered please make sure all the data you want to insert is new") as string,
         variant: "error",
         title: "ERROR",
       });
@@ -224,8 +230,11 @@ const PageContent = ({
   };
 
   return (
-    <div className="p-16 sm:p-24 w-full">
-      <div className="max-w-2xl rounded-lg shadow-xl">
+    <div className=" w-full h-screen items-center justify-center flex flex-col bg-white  ">
+      <span>Upload your excel file</span>
+      <span className="text-red-400">Note: duplicated data are rejected</span>
+
+      <div className="max-w-2xl rounded-lg shadow-xl  items-center justify-center w-[50%] ">
         <div style={{ height: 20 }} />
         <DragDropFile handleFile={handleFile}>
           <div className="flex items-center justify-center w-full">
@@ -233,7 +242,7 @@ const PageContent = ({
               <div className="flex flex-col items-center justify-center pt-7">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-96 h-96 text-gray-400 group-hover:text-gray-600"
+                  className="w-40 h-40 text-gray-400 group-hover:text-gray-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -246,7 +255,7 @@ const PageContent = ({
                   />
                 </svg>
                 <Typography className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
-                  {"ATTACH_FILE_OR_DRAG"}
+                  {"Attach file or drag"}
                 </Typography>
 
                 {file ? (
@@ -263,7 +272,7 @@ const PageContent = ({
           </div>
         </DragDropFile>
         <div style={{ height: 20 }} />
-        <div className="flex justify-center p-2">
+        <div className="flex justify-center ">
           <Button
             //@ts-ignore
             onClick={() => document.getElementById("file").click()}
@@ -274,21 +283,21 @@ const PageContent = ({
             <span>{"Upload File"}</span>
           </Button>
         </div>
+        <div style={{ height: 20 }} />
+
         {data && data.length ? (
           <div className="flex-col">
-            <div style={{ height: 20 }} />
-            <div className="bg-gray-200 w-full h-1 my-10" />
-            <div style={{ height: 20 }} />
+            {/* <div style={{ height: 20 }} /> */}
+            <div className="bg-gray-200 w-full h-1 " />
 
-            <div className="flex justify-center p-2">
-              <Typography color="textSecondary">{`               ${data.length}
-                             ${"row"}
-
-${"FOUND"} 
+            <div className="flex justify-center ">
+              <Typography color="textSecondary">{`${
+                data.length
+              }${" rows found"} 
               `}</Typography>
             </div>
 
-            <div style={{ height: 20 }} />
+            {/* <div style={{ height: 20 }} /> */}
 
             <div className="flex justify-center p-2">
               <Button
@@ -308,6 +317,7 @@ ${"FOUND"}
           </div>
         ) : null}
       </div>
+      {/* <div className="w-[50% h-10 bg-blue-500"></div> */}
     </div>
   );
 };

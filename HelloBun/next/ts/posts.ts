@@ -6,8 +6,8 @@ let headers = {
   "Access-Control-Allow-Origin": "*",
 };
 export async function postOldRequestToApi(payload: OldRequest[]) {
-  return await fetch(apiUrl, {
-    mode: "no-cors",
+  return await fetch(`${apiUrl}/uploadData`, {
+    // mode: "no-cors",
     method: "post",
     headers,
     body: JSON.stringify(payload),

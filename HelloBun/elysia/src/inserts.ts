@@ -14,6 +14,14 @@ export function convertToNewSchema(oldData: OldRequest[]) {
     insertType3(type3Data, db);
     insertType4(type4Data, db);
     insertType5(type5Data, db);
+
+    return {
+      type1: type1Data.length,
+      type2: type2Data.length,
+      type3: type3Data.length,
+      type4: type4Data.length,
+      type5: type5Data.length,
+    };
   } catch (error: Error | any) {
     throw new Error(error.message);
   } finally {
@@ -170,9 +178,10 @@ function insertType3(oldTypeData: OldRequest[], db: any) {
 
         insert.run(
           preventNaN(id),
-          oldRequest?.RequestData?.inspectionDate +
-            oldRequest?.RequestData?.inspectionTime,
-          oldRequest?.RequestData?.inspectionType,
+          oldRequest?.RequestData?.InspectionDate +
+            " " +
+            oldRequest?.RequestData?.InspectionTime,
+          oldRequest?.RequestData?.InspectionType,
           preventNaN(requestId)
         );
 
@@ -226,11 +235,14 @@ function insertType4(oldTypeData: OldRequest[], db: any) {
         lastestCompanyActivityId["MAX(id)"]
       : 0;
 
-    const activityIds: activity[] = db
+    let activityIds: activity[] = db
       .query("SELECT * FROM activity")
       .all() as activity[];
 
-    if (!activityIds.length) insertActivity();
+    if (!activityIds.length) {
+      insertActivity();
+      activityIds = db.query("SELECT * FROM activity").all() as activity[];
+    }
 
     const inserting = db.transaction((oldRequests: OldRequest[]) => {
       for (const oldRequest of oldRequests) {
@@ -238,9 +250,8 @@ function insertType4(oldTypeData: OldRequest[], db: any) {
         id += 1;
         insert.run(
           preventNaN(id),
-          oldRequest?.RequestData?.inspectionDate +
-            oldRequest?.RequestData?.inspectionTime,
-          oldRequest?.RequestData?.inspectionType,
+          oldRequest?.RequestData?.CompanyName,
+          oldRequest?.RequestData?.LicenceID,
           preventNaN(requestId)
         );
 
@@ -273,8 +284,6 @@ function insertType4(oldTypeData: OldRequest[], db: any) {
 }
 
 function insertType5(oldTypeData: OldRequest[], db: any) {
-  // const db = new Database("Requests.sqlite", { create: true });
-
   try {
     const insert = db.prepare(
       "INSERT INTO stampLicenseLetters  (id,companyName,licenceId,requestDate,requestId ) VALUES (?,?,?,?,?)"
